@@ -471,7 +471,7 @@ int main(){
 
 访问`0x31e0`周围的内存，得到`arr`的信息：
 
-![array](img\array.png)
+![array](img/array.png)
 
 下标与数据的对应关系为：
 
@@ -640,7 +640,7 @@ loop{
 
 这部分中有关一个结构体。检查对象`node1`的位置`0x5210`附近并以不同格式打印，得到：
 
-![node](D:\学习\2024-2025 第1学期\计算机系统 赵明昊,钱卫宁\Lab\2.bomblab\pic_src\node.png)
+![node](img/node.png)
 
 可以判断这是结构体对象，包含成员参数：4字节的数字`number`，4字节的数字`index`，以及8字节的地址`nextNode`指向下一个`node`的首地址。
 
@@ -675,7 +675,7 @@ loop{
 
 所以`node`对象首地址在栈内的存储顺序从小地址到大地址其实是`node_num1`, `node_num2`, ..., `node_num6`，栈内存储内容如图：
 
-![stack_status](img\stack_status.png)
+![stack_status](img/stack_status.png)
 
 #### 3. `1929`~ `195b`部分：给`node_num1`~`node_num6`做”首尾相连“
 
@@ -780,11 +780,11 @@ loop{
 
 我们可以发现这一阶段要求我们输入一个介于`[1,1001]`整数，它将被转换为`long`类型后传入`fun7()`，而一并被传入的还有结构体对象`n1`。我们要输入的数字即为满足`fun7(n1, x) = 4`的解。仍然以不同格式打印`0x5130`附近的值，看到：
 
-![TreeNode](img\TreeNode.png)
+![TreeNode](img/TreeNode.png)
 
 可见这是一个占据32字节的结构体，起名为`TreeNode`，包含的成员参数有8字节的`long number`，8字节的`TreeNode *leftNode`，8字节的`TreeNode *rightNode`，以及8字节用于对齐的无用参数。我们可以据此画出一棵树。
 
-![树](img\树.png)
+![树](img/树.png)
 
 阅读`fun7()`：
 
@@ -849,7 +849,7 @@ int fun7(TreeNode *node, long arg2){	// arg2 = 输入的1-1001之间的数
 
 例如，`fun7(n1, 7)`的返回值可以按下图方式计算：
 
-![树_计算](D:\学习\2024-2025 第1学期\计算机系统 赵明昊,钱卫宁\Lab\2.bomblab\pic_src\树_计算.jpg)
+![树_计算](img/树_计算.jpg)
 
 可以按照此方式计算出当`x=树中结点的数`，`fun7(n1,x)`的值。那显然，我们要输入的数字正是`7`。
 
