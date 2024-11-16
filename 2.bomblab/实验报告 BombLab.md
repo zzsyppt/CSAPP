@@ -471,7 +471,7 @@ int main(){
 
 访问`0x31e0`周围的内存，得到`arr`的信息：
 
-![array](D:\学习\2024-2025 第1学期\计算机系统 赵明昊,钱卫宁\Lab\2.bomblab\pic_src\array.png)
+![array](img\array.png)
 
 下标与数据的对应关系为：
 
@@ -675,7 +675,7 @@ loop{
 
 所以`node`对象首地址在栈内的存储顺序从小地址到大地址其实是`node_num1`, `node_num2`, ..., `node_num6`，栈内存储内容如图：
 
-![stack_status](D:\学习\2024-2025 第1学期\计算机系统 赵明昊,钱卫宁\Lab\2.bomblab\pic_src\stack_status.png)
+![stack_status](img\stack_status.png)
 
 #### 3. `1929`~ `195b`部分：给`node_num1`~`node_num6`做”首尾相连“
 
@@ -780,11 +780,11 @@ loop{
 
 我们可以发现这一阶段要求我们输入一个介于`[1,1001]`整数，它将被转换为`long`类型后传入`fun7()`，而一并被传入的还有结构体对象`n1`。我们要输入的数字即为满足`fun7(n1, x) = 4`的解。仍然以不同格式打印`0x5130`附近的值，看到：
 
-![TreeNode](D:\学习\2024-2025 第1学期\计算机系统 赵明昊,钱卫宁\Lab\2.bomblab\pic_src\TreeNode.png)
+![TreeNode](img\TreeNode.png)
 
 可见这是一个占据32字节的结构体，起名为`TreeNode`，包含的成员参数有8字节的`long number`，8字节的`TreeNode *leftNode`，8字节的`TreeNode *rightNode`，以及8字节用于对齐的无用参数。我们可以据此画出一棵树。
 
-![树](D:\学习\2024-2025 第1学期\计算机系统 赵明昊,钱卫宁\Lab\2.bomblab\pic_src\树.png)
+![树](img\树.png)
 
 阅读`fun7()`：
 
@@ -872,4 +872,4 @@ Border relations with Canada have never been better.
 
 运行结果：
 
-![image-20241023174456059](C:\Users\zzsyp\AppData\Roaming\Typora\typora-user-images\image-20241023174456059.png)
+![运行结果](img/result.png)

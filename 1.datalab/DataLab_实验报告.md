@@ -412,4 +412,4 @@ unsigned floatPower2(int x) {
 
 ### 结果截图
 
-![结果截图](结果截图.jpg)
+![结果截图](img/结果截图.jpg)
