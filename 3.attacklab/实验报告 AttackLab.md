@@ -35,7 +35,7 @@ c0 17 40 00 00 00 00 00 /* 返回后 跳转到touch1() */
 
 将其保存为`phase1.txt`，用`hex2raw`将其编码为字符串形式的文件`phase1_raw.txt`，再将其作为命令行参数作为输入。成功的结果截图如下：
 
-![phase1](img\phase1.jpg)
+![phase1](img/phase1.jpg)
 
 
 
