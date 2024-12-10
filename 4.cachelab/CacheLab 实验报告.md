@@ -336,17 +336,17 @@ int main(int argc,char* argv[]){
 }
 ```
 
+​	完整`csim.c`见[CSAPP/4.cachelab/cachelab-handout/csim.c at main · zzsyppt/CSAPP](https://github.com/zzsyppt/CSAPP/blob/main/4.cachelab/cachelab-handout/csim.c)。
+
 ### 3. 实验结果
 
 ​	下面给出`csim.c`的流程图：
 
-![csim-flowchart](images\csim-flowchart.png)
-
-​	完整`csim.c`见[CSAPP/4.cachelab/cachelab-handout/csim.c at main · zzsyppt/CSAPP](https://github.com/zzsyppt/CSAPP/blob/main/4.cachelab/cachelab-handout/csim.c)
+![csim-flowchart](images/csim-flowchart.png)
 
 ​	执行`make`和`./test-csim`，结果如下：
 
-![PartA结果](images\Part A scoring.png)
+![PartA结果](images/Part A scoring.png)
 
 ## Part B: Optimizing Matrix Transpose
 
@@ -383,7 +383,7 @@ void transpose_submit(int M, int N, int A[N][M], int B[M][N]){
 
 ​	由于缓存有`32`组，每组存放`8`个`int`变量，且经过分析得到矩阵`A`和`B`相同元素所存放进的缓存块是相同的，所以，`A`, `B`矩阵的各个元素所存放的缓存位置为如下情况：
 
-![32x32_matrix](images\32x32_matrix.png)
+![32x32_matrix](images/32x32_matrix.png)
 
 - (1) `A`：横着遍历，每次遍历到新的一组的元素就会发生`miss`，共计`128`个；
 
@@ -395,7 +395,7 @@ void transpose_submit(int M, int N, int A[N][M], int B[M][N]){
 
 ​	下面对`32×32`的矩阵转置进行优化，根据上述分析，主要是减少遍历`B`的`miss`数。根据实验文档的提示，我们采用`分块(blocking)`技术。显然，采用大小为`8×8`子矩阵是符合缓存结构的。`B`的子矩阵的第一列一旦被加载进缓存后，子矩阵后续元素的访问都会命中。我们把矩阵分块，对`A`的每个子矩阵分别求转置放入`B`的相应位置中，示意图与代码如下：
 
-![32x32_blocking](images\32x32_blocking.png)
+![32x32_blocking](images/32x32_blocking.png)
 
 ```c
 void trans_32_32(int A[32][32], int B[32][32]){
@@ -452,27 +452,27 @@ void trans_32_32(int A[32][32], int B[32][32]){
 
 ​	经过测试，优化对角线后的`miss`数为`288`，符合满分标准。
 
-![trans_res_1](images\trans_res_1.png)
+![trans_res_1](images/trans_res_1.png)
 
 #### 部分 2 - 64×64矩阵转置
 
 ​	`A`,`B`矩阵各个元素的存放位置如下图（截取了左上角`16×16`的部分）。
 
-![64x64](images\64x64_matrix.png)	
+![64x64](images/64x64_matrix.png)	
 
 ​	仍采用分块的思路。如果继续采用子矩阵为`8×8`的分块方式，可以看到对`B`矩阵的访问仍会造成抖动；而如果我们把矩阵分成`4×4`的子矩阵，虽然`B`矩阵的访问不再有抖动，但`A`矩阵的缓存没有得到充分利用，测试结果为`1700`次`miss`。我们要找到这么一种方法，让`A`和`B`的缓存都得到充分利用，翻译过来即：**访问`A`时要尽量一连串读取`8`个值，访问`B`时要尽量一口气把竖着的四个组存满**。
 
 ​	因此，我们找到这么一种策略，如下图所示：
 
-![64x64_1](images\64x64_1.png)
+![64x64_1](images/64x64_1.png)
 
 （1）把`A`的`8×8`子矩阵的前四行的转置放进`B`的前四行，如图所示。黄色部分的转置已正确放到目标位置，而绿色部分的转置本应放到左下角，现在为提高缓存命中率先暂时放到图中所示位置。这一步的`miss`包括`4`个`A`的`miss`和`4`个`B`的`miss`。
 
-![64x64_2](images\64x64_2.png)
+![64x64_2](images/64x64_2.png)
 
 （2）这一步同时把绿色部分放到正确的位置，并把粉色部分放到正确的位置。以第一轮循环为例来解释：这里先用`4`个中间变量把`B`中错误放置的第一行值（缓存在`旧的组0`中）暂存，再把`A`的粉红色部分的第一列值放到正确的位置（还缓存在`旧的组0`中）。现在`旧的组0`已经不再会被用到，因此即可把中间变量存进其正确的位置（缓存会驱逐`旧的组0`，加载`新的组0`）。这一步的`miss`包括①加载`A`粉色部分第一列时的`4`个`miss`；②正确保存绿色部分的`4`个`miss`。
 
-![64x64_3](images\64x64_3.png)
+![64x64_3](images/64x64_3.png)
 
 （3）最后的紫色部分直接放进正确位置即可，这些元素都在缓存中，不会发生`miss`。
 
@@ -544,7 +544,7 @@ void trans_64_64(int A[64][64], int B[64][64]){
 
 ​	每个`8×8`子矩阵（对角线子矩阵除外）的转置有`16`次`miss`，共有`64`个`8×8`子矩阵，所以理论总计有不少于`16*64=1024`次`miss`。经过测试，共有`1228`次`miss`。
 
-![trans_res_2](images\trans_res_2.png)
+![trans_res_2](images/trans_res_2.png)
 
 #### 部分 3 - 67×61矩阵转置
 
@@ -566,7 +566,7 @@ void trans_61_67(int A[67][61], int B[61][67]){
 }
 ```
 
-![trans_res_3](images\trans_res_3.png)
+![trans_res_3](images/trans_res_3.png)
 
 ## 实验结果
 
@@ -578,7 +578,7 @@ wget https://gitee.com/lin-xi-269/csapplab/raw/master/lab5cachelab/cachelab-hand
 
 ​	运行`python3 driver.py`，得分结果如下：
 
-![scoring](images\scoring.png)
+![scoring](images/scoring.png)
 
 ## 总结
 
