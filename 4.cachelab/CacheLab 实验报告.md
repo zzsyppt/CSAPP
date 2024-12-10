@@ -80,7 +80,7 @@ I 0400d7d4,8
 Usage: ./csim [-hv] -s <s> -E <E> -b <b> -t <tracefile> 
 ```
 
-​	我们采用`getopt`函数解析命令行参数，使用方法可参考官方文档。其中，为了方便调试，在这里我们实现`-v`功能，用一个全局变量`int showDetails`来判断未来模拟过程中是否输出细节信息。
+​	我们采用`getopt`函数解析命令行参数，使用方法可参考官方文档或[Linux下getopt()函数的简单使用](https://www.cnblogs.com/qingergege/p/5914218.html)。其中，为了方便调试，在这里我们实现`-v`功能，用一个全局变量`int showDetails`来判断未来模拟过程中是否输出细节信息。
 
 ``` c
 int showDetails = 0;
@@ -342,6 +342,8 @@ int main(int argc,char* argv[]){
 
 ![csim-flowchart](D:\学习\2024-2025 第1学期\计算机系统 赵明昊,钱卫宁\Lab\4.cachelab\images\csim-flowchart.png)
 
+​	完整`csim.c`见[CSAPP/4.cachelab/cachelab-handout/csim.c at main · zzsyppt/CSAPP](https://github.com/zzsyppt/CSAPP/blob/main/4.cachelab/cachelab-handout/csim.c)
+
 ​	执行`make`和`./test-csim`，结果如下：
 
 ![PartA结果](D:\学习\2024-2025 第1学期\计算机系统 赵明昊,钱卫宁\Lab\4.cachelab\images\Part A scoring.png)
@@ -387,7 +389,7 @@ void transpose_submit(int M, int N, int A[N][M], int B[M][N]){
 
 - (2) `B`：竖着遍历，每遍历一个元素都是新的一组，共计`32*32=1024`个；
 
-- (3) 实验文档特别强调了我们要关注对角线元素的`conflict miss`：以对角线元素`[0][0]`的转置为例。如访问`A[0][0]`时，`组0`是被`A`占用的状态（这一占用导致的`miss`已在(1)中计入）；此时加载`B[0][0]`时，`B`也占用`组0`（这一占用导致的`miss`已在(2)中计入）；接着加载`A[0][1]`时又会发生`miss`，`组0`再次被`A`占用（这一`miss`未被(1)(2)中计入）。每次转置一个对角线元素，不在(1)(2)考虑内的`miss`次数是1个。而对于`[31][31`]的元素，由于访问`B[31][31]`后转置即结束，不会发生新的未计入的`miss`，故(1)(2)中未考虑到的`miss`共计`31`个。
+- (3) 实验文档特别强调了我们要关注对角线元素的`conflict miss`：以对角线元素`[0][0]`的转置为例。如访问`A[0][0]`时，`组0`是被`A`占用的状态（这一占用导致的`miss`已在(1)中计入）；此时加载`B[0][0]`时，`B`也占用`组0`（这一占用导致的`miss`已在(2)中计入）；接着加载`A[0][1]`时又会发生`miss`，`组0`再次被`A`占用（这一`miss`未被(1)(2)中计入）。每次转置一个对角线元素，不在(1)(2)考虑内的`miss`次数是1个。而对于`[31][31]`的元素，由于访问`B[31][31]`后转置即结束，不会发生新的未计入的`miss`，故(1)(2)中未考虑到的`miss`共计`31`个。
 
 ​	综上，理论上共计有`1183`次`miss`，与实际结果相近。
 
